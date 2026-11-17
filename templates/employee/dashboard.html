@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block title %}Employee Dashboard | Smart HRMS{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+{% endblock %}
+
+{% block page_title %}Employee Dashboard{% endblock %}
+{% block page_subtitle %}Manage your attendance, apply for leaves, and keep your contact details updated{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-4">
+    
+    <!-- Welcome Profile Overview -->
+    <div class="col-12 col-lg-8">
+        <div class="card border-0 shadow-sm rounded-3 bg-white p-4 h-100 d-flex flex-column justify-content-between">
+            <div>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="avatar bg-primary text-white me-3 d-flex align-items-center justify-content-center fw-bold fs-3" style="width: 64px; height: 64px; border-radius: 50%;">
+                        {{ employee.first_name|slice:":1"|upper }}{{ employee.last_name|slice:":1"|upper }}
+                    </div>
+                    <div>
+                        <h3 class="fw-bold text-dark mb-0">{{ employee.first_name }} {{ employee.last_name }}</h3>
+                        <span class="text-muted fs-6">{{ employee.designation }} &bull; <strong class="text-primary">{{ employee.department_name }}</strong></span>
+                    </div>
+                </div>
+                <p class="text-muted leading-relaxed">
+                    Use your employee portal to mark today's attendance log, submit leave requests, view leave processing logs, or update your contact information (phone and email details).
+                </p>
+            </div>
+            
+            <div class="d-flex flex-wrap gap-2 mt-3">
+                <a href="{% url 'attendance_module:mark' %}" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm"><i class="bi bi-calendar2-check me-1"></i>Mark Attendance</a>
+                <a href="{% url 'leave_module:apply' %}" class="btn btn-outline-primary px-4 py-2 fw-semibold"><i class="bi bi-send me-1"></i>Apply for Leave</a>
+                <a href="{% url 'employee_module:profile' %}" class="btn btn-outline-secondary px-4 py-2 fw-semibold"><i class="bi bi-person me-1"></i>View Profile</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Today's Check-in Card -->
+    <div class="col-12 col-lg-4">
+        <div class="card border-0 shadow-sm rounded-3 bg-white p-4 h-100 d-flex flex-column justify-content-between">
+            <div>
+                <h5 class="fw-bold text-dark mb-3"><i class="bi bi-clock-history me-2 text-primary"></i>Attendance Status</h5>
+                <p class="text-muted small">Today's Date: <strong>{% now "Y-m-d" %}</strong></p>
+                
+                <div class="my-4 text-center">
+                    {% if today_attendance %}
+                        <div class="display-6 text-success fw-bold"><i class="bi bi-check-circle-fill me-2"></i>Present</div>
+                        <p class="text-muted small mt-2">Checked In at {{ today_attendance.check_in_time }}</p>
+                    {% else %}
+                        <div class="display-6 text-secondary fw-bold"><i class="bi bi-dash-circle-fill me-2"></i>Unmarked</div>
+                        <p class="text-muted small mt-2">You haven't logged attendance today.</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if not today_attendance %}
+            <form action="{% url 'attendance_module:mark' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="attendance_status" value="Present">
+                <button type="submit" class="btn btn-success w-100 py-2.5 fw-semibold shadow-sm"><i class="bi bi-check2-square me-1"></i>Mark Present Now</button>
+            </form>
+            {% else %}
+            <button class="btn btn-outline-success w-100 py-2.5 fw-semibold" disabled><i class="bi bi-check2 me-1"></i>Attendance Saved</button>
+            {% endif %}
+        </div>
+    </div>
+    
+</div>
+
+<div class="row g-4">
+    
+    <!-- Leave History Summary -->
+    <div class="col-12 col-md-6 col-lg-4">
+        <div class="card border-0 shadow-sm rounded-3 bg-white p-4">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h6 class="text-secondary fw-bold mb-0 text-uppercase tracking-wider small">Leave Request Summary</h6>
+                <span class="badge bg-light text-secondary border">Total Requests: {{ leave_count }}</span>
+            </div>
+            
+            <div class="d-flex align-items-center justify-content-around py-3">
+                <div class="text-center">
+                    <h2 class="fw-bold text-warning mb-1">{{ pending_leaves }}</h2>
+                    <span class="text-muted small">Pending Approval</span>
+                </div>
+                <div class="vr bg-light" style="height: 40px;"></div>
+                <div class="text-center">
+                    <h2 class="fw-bold text-dark mb-1">{{ leave_count|add:"-"|add:pending_leaves|default:0 }}</h2>
+                    <span class="text-muted small">Processed Requests</span>
+                </div>
+            </div>
+            
+            <a href="{% url 'leave_module:history' %}" class="btn btn-sm btn-outline-secondary w-100 fw-semibold mt-3">View Leave Logs</a>
+        </div>
+    </div>
+    
+</div>
+{% endblock %}

@@ -1,0 +1,429 @@
+/* Smart HRMS Stylesheet */
+/* Core Theme & Typography */
+
+:root {
+    --primary-gradient-start: #3b82f6; /* lighter blue */
+    --primary-gradient-end: #1e3a8a;   /* darker blue */
+    --primary-color: #2563eb;
+    --primary-hover: #1d4ed8;
+    --secondary-color: #64748b;
+    --bg-color: #f8fafc;
+    --sidebar-bg: #0f172a;
+    --sidebar-text: #94a3b8;
+    --sidebar-text-hover: #ffffff;
+    --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --card-shadow-hover: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: #1e293b;
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Layout Framework */
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: var(--sidebar-bg);
+    z-index: 1030;
+    transition: all 0.3s ease;
+    overflow-y: auto;
+}
+
+.main-content {
+    margin-left: 260px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+/* Shared header */
+.app-header {
+    min-height: 76px;
+    padding: 0.75rem clamp(1rem, 2.5vw, 2rem);
+    border-bottom: 1px solid #e8edf4;
+    box-shadow: 0 4px 16px rgb(15 23 42 / 0.04);
+    z-index: 1020;
+}
+
+.app-header-inner {
+    min-height: 48px;
+    gap: 1rem;
+}
+
+.header-toggle {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    color: #334155;
+    background: #fff;
+    font-size: 1.5rem;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.header-toggle:hover {
+    border-color: #bfdbfe;
+    color: var(--primary-color);
+    background: #eff6ff;
+}
+
+.header-toggle:focus-visible,
+.user-menu-trigger:focus-visible,
+.sidebar-backdrop:focus-visible {
+    outline: 3px solid rgb(37 99 235 / 35%);
+    outline-offset: 2px;
+}
+
+.header-greeting {
+    min-width: 0;
+    line-height: 1.35;
+}
+
+.header-eyebrow {
+    display: block;
+    margin-bottom: 0.15rem;
+    color: #94a3b8;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.header-welcome {
+    overflow: hidden;
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.header-welcome > span:first-child {
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.header-role {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.5rem;
+    padding: 0.2rem 0.55rem;
+    border: 1px solid #dbeafe;
+    border-radius: 999px;
+    color: #1d4ed8;
+    background: #eff6ff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 1.2;
+    vertical-align: middle;
+}
+
+.user-menu-trigger {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.3rem 0.65rem 0.3rem 0.35rem;
+    border: 1px solid transparent;
+    border-radius: 14px;
+    color: #334155;
+    background: transparent;
+    text-align: left;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.user-menu-trigger::after {
+    margin-left: 0.25rem;
+    color: #94a3b8;
+}
+
+.user-menu-trigger:hover,
+.user-menu-trigger[aria-expanded="true"] {
+    border-color: #e2e8f0;
+    background: #f8fafc;
+}
+
+.user-avatar {
+    width: 42px;
+    height: 42px;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #dbeafe;
+    border-radius: 50%;
+    color: #fff;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    box-shadow: 0 2px 6px rgb(37 99 235 / 20%);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.user-menu-copy {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+}
+
+.user-menu-name {
+    max-width: 150px;
+    overflow: hidden;
+    color: #0f172a;
+    font-size: 0.84rem;
+    font-weight: 700;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user-menu-role {
+    margin-top: 0.15rem;
+    color: #94a3b8;
+    font-size: 0.7rem;
+    font-weight: 500;
+}
+
+.user-menu-dropdown {
+    min-width: 210px;
+    margin-top: 0.65rem !important;
+    padding: 0.45rem;
+    border: 1px solid #e8edf4;
+    border-radius: 14px;
+    box-shadow: 0 14px 35px rgb(15 23 42 / 12%);
+}
+
+.user-menu-dropdown .dropdown-item {
+    padding: 0.65rem 0.75rem;
+    border-radius: 9px;
+    color: #334155;
+    font-size: 0.88rem;
+}
+
+.user-menu-dropdown .dropdown-item:hover {
+    background: #f1f5f9;
+}
+
+.sidebar-backdrop {
+    display: none;
+}
+
+/* Sidebar Styles */
+.sidebar-menu .menu-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    font-size: 0.925rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border-left: 4px solid transparent;
+}
+
+.sidebar-menu .menu-item i {
+    font-size: 1.1rem;
+    margin-right: 0.75rem;
+}
+
+.sidebar-menu .menu-item:hover {
+    color: var(--sidebar-text-hover);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-menu .menu-item.active {
+    color: #ffffff;
+    background-color: rgba(37, 99, 235, 0.15);
+    border-left-color: var(--primary-color);
+}
+
+/* Toggle States (sidebar collapsed) */
+.sidebar.collapsed {
+    transform: translateX(-260px);
+}
+
+.main-content.expanded {
+    margin-left: 0;
+}
+
+/* Login Page Specific Background */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+}
+
+/* Custom UI Components */
+.card {
+    box-shadow: var(--card-shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-dashboard:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-shadow-hover);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.btn-primary:hover, .btn-primary:focus {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+}
+
+/* Table styling */
+.table thead th {
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* Breadcrumbs */
+.breadcrumb-item a {
+    color: var(--secondary-color);
+}
+.breadcrumb-item.active {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+/* Typography Helpers */
+.tracking-wider {
+    letter-spacing: 0.05em;
+}
+
+/* Responsive Overrides */
+@media (max-width: 767.98px) {
+    .sidebar {
+        transform: translateX(-260px);
+    }
+    .sidebar.show {
+        transform: translateX(0);
+    }
+    .sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 1025;
+        display: block;
+        border: 0;
+        background: rgb(15 23 42 / 45%);
+        opacity: 0;
+        pointer-events: none;
+        visibility: hidden;
+        transition: opacity 0.25s ease;
+    }
+    .sidebar-backdrop.show {
+        opacity: 1;
+        pointer-events: auto;
+        visibility: visible;
+    }
+    .main-content {
+        margin-left: 0;
+    }
+    .app-header-inner {
+        gap: 0.65rem;
+    }
+    .header-eyebrow {
+        display: none;
+    }
+    .header-welcome {
+        font-size: 0.8rem;
+    }
+    .header-role {
+        margin-left: 0.25rem;
+        padding: 0.16rem 0.4rem;
+        font-size: 0.62rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .user-menu-copy {
+        display: none;
+    }
+    .user-menu-trigger {
+        gap: 0.25rem;
+        padding-right: 0.45rem;
+    }
+    .user-avatar {
+        width: 38px;
+        height: 38px;
+    }
+}
+
+/* Print CSS */
+@media print {
+    .sidebar, .navbar, #sidebarToggleBtn, .d-print-none {
+        display: none !important;
+    }
+    .main-content {
+        margin-left: 0 !important;
+        padding: 0 !important;
+    }
+    .card {
+        box-shadow: none !important;
+        border: none !important;
+    }
+}
+
+/* ----------------------------------- */
+/* UI polish: focus, hover, and fade‑in */
+/* ----------------------------------- */
+
+/* Fade‑in animation for page load */
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeIn 0.6s ease-out forwards; opacity: 0; }
+
+/* Input focus styling */
+.form-control:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+    background-color: #fff;
+}
+
+/* Button micro‑animation */
+.btn-primary {
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.btn-primary:hover {
+    transform: translateY(-2px);
+    background-color: var(--primary-hover);
+    box-shadow: 0 6px 12px -3px rgba(0,0,0,0.15);
+}
+
+/* Card hover lift (already defined) – ensure smooth */
+.card-dashboard {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Sidebar link active animation */
+.sidebar-menu .menu-item.active {
+    animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+    0%, 100% { background-color: rgba(37,99,235,0.15); }
+    50% { background-color: rgba(37,99,235,0.25); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .header-toggle,
+    .user-menu-trigger,
+    .sidebar-backdrop {
+        transition: none;
+    }
+}

@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Log Attendance | Smart HRMS{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'hr_module:dashboard' %}" class="text-decoration-none text-secondary">Dashboard</a></li>
+<li class="breadcrumb-item"><a href="{% url 'attendance_module:manage' %}" class="text-decoration-none text-secondary">Attendance Logs</a></li>
+<li class="breadcrumb-item active" aria-current="page">Log Manually</li>
+{% endblock %}
+
+{% block page_title %}Manual Attendance Logger{% endblock %}
+{% block page_subtitle %}Manually record presence or absence for an active employee{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body p-4">
+                
+                <h5 class="card-title fw-bold text-dark mb-4"><i class="bi bi-calendar-plus me-2 text-primary"></i>Attendance Record</h5>
+                
+                <form action="{% url 'attendance_module:add' %}" method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Employee -->
+                    <div class="mb-3">
+                        <label for="employee_id" class="form-label fw-semibold text-secondary">Employee <span class="text-danger">*</span></label>
+                        <select class="form-select py-2" id="employee_id" name="employee_id" required>
+                            <option value="" disabled selected>Select Employee</option>
+                            {% for emp in employees %}
+                                <option value="{{ emp.employee_id }}">{{ emp.first_name }} {{ emp.last_name }} (ID: {{ emp.employee_id }})</option>
+                            {% endfor %}
+                        </select>
+                        <div class="invalid-feedback">Please select an employee.</div>
+                    </div>
+                    
+                    <!-- Date -->
+                    <div class="mb-3">
+                        <label for="attendance_date" class="form-label fw-semibold text-secondary">Attendance Date <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control py-2" id="attendance_date" name="attendance_date" required value="{% now 'Y-m-d' %}">
+                        <div class="invalid-feedback">Please select attendance date.</div>
+                    </div>
+                    
+                    <!-- Check-in Time -->
+                    <div class="mb-3">
+                        <label for="check_in_time" class="form-label fw-semibold text-secondary">Check-In Time</label>
+                        <input type="time" class="form-control py-2" id="check_in_time" name="check_in_time" placeholder="e.g. 09:00:00">
+                        <div class="form-text text-muted">Leave blank for absent status or to inherit defaults.</div>
+                    </div>
+                    
+                    <!-- Status -->
+                    <div class="mb-4">
+                        <label for="attendance_status" class="form-label fw-semibold text-secondary">Attendance Status <span class="text-danger">*</span></label>
+                        <select class="form-select py-2" id="attendance_status" name="attendance_status" required>
+                            <option value="Present" selected>Present</option>
+                            <option value="Absent">Absent</option>
+                        </select>
+                        <div class="invalid-feedback">Please select a status.</div>
+                    </div>
+                    
+                    <!-- Buttons -->
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm"><i class="bi bi-save me-1"></i>Log Attendance</button>
+                        <a href="{% url 'attendance_module:manage' %}" class="btn btn-outline-secondary px-4 py-2 fw-semibold">Cancel</a>
+                    </div>
+                    
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

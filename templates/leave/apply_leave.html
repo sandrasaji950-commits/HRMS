@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Apply for Leave | Smart HRMS{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'employee_module:dashboard' %}" class="text-decoration-none text-secondary">Dashboard</a></li>
+<li class="breadcrumb-item active" aria-current="page">Apply Leave</li>
+{% endblock %}
+
+{% block page_title %}Leave Application Form{% endblock %}
+{% block page_subtitle %}Submit a new request for leave approval{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body p-4">
+                
+                <h5 class="card-title fw-bold text-dark mb-4"><i class="bi bi-send-fill me-2 text-primary"></i>Application Form</h5>
+                
+                <form action="{% url 'leave_module:apply' %}" method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Leave Type -->
+                    <div class="mb-3">
+                        <label for="leave_type" class="form-label fw-semibold text-secondary">Leave Type <span class="text-danger">*</span></label>
+                        <select class="form-select py-2" id="leave_type" name="leave_type" required>
+                            <option value="" disabled selected>Select Leave Type</option>
+                            <option value="Casual Leave">Casual Leave</option>
+                            <option value="Sick Leave">Sick Leave</option>
+                            <option value="Maternity/Paternity Leave">Maternity/Paternity Leave</option>
+                            <option value="Unpaid Leave">Unpaid Leave</option>
+                        </select>
+                        <div class="invalid-feedback">Please select a leave type.</div>
+                    </div>
+                    
+                    <div class="row g-3 mb-3">
+                        <!-- Start Date -->
+                        <div class="col-6">
+                            <label for="start_date" class="form-label fw-semibold text-secondary">Start Date <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control py-2" id="start_date" name="start_date" required value="{% now 'Y-m-d' %}">
+                            <div class="invalid-feedback">Please select start date.</div>
+                        </div>
+                        
+                        <!-- End Date -->
+                        <div class="col-6">
+                            <label for="end_date" class="form-label fw-semibold text-secondary">End Date <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control py-2" id="end_date" name="end_date" required value="{% now 'Y-m-d' %}">
+                            <div class="invalid-feedback">Please select end date.</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Reason -->
+                    <div class="mb-4">
+                        <label for="reason" class="form-label fw-semibold text-secondary">Reason / Explanation</label>
+                        <textarea class="form-control py-2" id="reason" name="reason" rows="3" placeholder="Enter reason for leave..."></textarea>
+                    </div>
+                    
+                    <!-- Buttons -->
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm"><i class="bi bi-send me-1"></i>Submit Application</button>
+                        <a href="{% url 'leave_module:history' %}" class="btn btn-outline-secondary px-4 py-2 fw-semibold">Cancel</a>
+                    </div>
+                    
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

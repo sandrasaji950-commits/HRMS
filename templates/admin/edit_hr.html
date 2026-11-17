@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit HR Manager | Smart HRMS{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'admin_module:dashboard' %}" class="text-decoration-none text-secondary">Dashboard</a></li>
+<li class="breadcrumb-item"><a href="{% url 'admin_module:manage_hr' %}" class="text-decoration-none text-secondary">HR Managers</a></li>
+<li class="breadcrumb-item active" aria-current="page">Edit</li>
+{% endblock %}
+
+{% block page_title %}Update HR Manager{% endblock %}
+{% block page_subtitle %}Modify credentials for administrative HR manager: {{ hr_user.username }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body p-4">
+                
+                <h5 class="card-title fw-bold text-dark mb-4"><i class="bi bi-pencil-square me-2 text-primary"></i>HR Manager Details</h5>
+                
+                <form action="{% url 'admin_module:edit_hr' hr_user.id %}" method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Username -->
+                    <div class="mb-3">
+                        <label for="username" class="form-label fw-semibold text-secondary">Username <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control py-2" id="username" name="username" value="{{ hr_user.username }}" required placeholder="Enter unique username">
+                        <div class="invalid-feedback">Please enter a username.</div>
+                    </div>
+                    
+                    <!-- Password (Optional) -->
+                    <div class="mb-4">
+                        <label for="password" class="form-label fw-semibold text-secondary">New Password (Leave blank to keep current)</label>
+                        <input type="password" class="form-control py-2" id="password" name="password" minlength="8" placeholder="Enter new password to reset">
+                        <div class="invalid-feedback">Password must be at least 8 characters long.</div>
+                        <div class="form-text text-muted">Current Plain Password: <strong>{% if hr_user.plain_password %}{{ hr_user.plain_password }}{% else %}Not Stored{% endif %}</strong></div>
+                    </div>
+                    
+                    <!-- Buttons -->
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm"><i class="bi bi-save me-1"></i>Save Changes</button>
+                        <a href="{% url 'admin_module:manage_hr' %}" class="btn btn-outline-secondary px-4 py-2 fw-semibold">Cancel</a>
+                    </div>
+                    
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

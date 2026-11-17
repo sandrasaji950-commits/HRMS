@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard | Smart HRMS{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+{% endblock %}
+
+{% block page_title %}System Dashboard{% endblock %}
+{% block page_subtitle %}High-level overview of system metrics and administration{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-5">
+    
+    <!-- Active Employees Card -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-dashboard border-0 shadow-sm rounded-3 h-100 position-relative overflow-hidden">
+            <div class="card-body p-4 d-flex align-items-center">
+                <div class="stats-icon bg-primary bg-opacity-10 text-primary rounded-3 p-3 me-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                    <i class="bi bi-person-badge-fill fs-3"></i>
+                </div>
+                <div>
+                    <h6 class="text-secondary fw-semibold mb-1 small text-uppercase tracking-wider">Active Employees</h6>
+                    <h2 class="mb-0 fw-bold text-dark">{{ total_employees }}</h2>
+                </div>
+            </div>
+            <div class="position-absolute bottom-0 start-0 w-100 bg-primary" style="height: 4px;"></div>
+        </div>
+    </div>
+    
+    <!-- HR Managers Card -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-dashboard border-0 shadow-sm rounded-3 h-100 position-relative overflow-hidden">
+            <div class="card-body p-4 d-flex align-items-center">
+                <div class="stats-icon bg-info bg-opacity-10 text-info rounded-3 p-3 me-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                    <i class="bi bi-people-fill fs-3"></i>
+                </div>
+                <div>
+                    <h6 class="text-secondary fw-semibold mb-1 small text-uppercase tracking-wider">HR Managers</h6>
+                    <h2 class="mb-0 fw-bold text-dark">{{ total_hr }}</h2>
+                </div>
+            </div>
+            <div class="position-absolute bottom-0 start-0 w-100 bg-info" style="height: 4px;"></div>
+        </div>
+    </div>
+    
+    <!-- Departments Card -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-dashboard border-0 shadow-sm rounded-3 h-100 position-relative overflow-hidden">
+            <div class="card-body p-4 d-flex align-items-center">
+                <div class="stats-icon bg-success bg-opacity-10 text-success rounded-3 p-3 me-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                    <i class="bi bi-building fs-3"></i>
+                </div>
+                <div>
+                    <h6 class="text-secondary fw-semibold mb-1 small text-uppercase tracking-wider">Departments</h6>
+                    <h2 class="mb-0 fw-bold text-dark">{{ total_departments }}</h2>
+                </div>
+            </div>
+            <div class="position-absolute bottom-0 start-0 w-100 bg-success" style="height: 4px;"></div>
+        </div>
+    </div>
+    
+    <!-- Pending Leave Requests Card -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="card card-dashboard border-0 shadow-sm rounded-3 h-100 position-relative overflow-hidden">
+            <div class="card-body p-4 d-flex align-items-center">
+                <div class="stats-icon bg-warning bg-opacity-10 text-warning rounded-3 p-3 me-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                    <i class="bi bi-calendar-event-fill fs-3"></i>
+                </div>
+                <div>
+                    <h6 class="text-secondary fw-semibold mb-1 small text-uppercase tracking-wider">Pending Leaves</h6>
+                    <h2 class="mb-0 fw-bold text-dark">{{ pending_leaves }}</h2>
+                </div>
+            </div>
+            <div class="position-absolute bottom-0 start-0 w-100 bg-warning" style="height: 4px;"></div>
+        </div>
+    </div>
+    
+</div>
+
+<!-- Welcome Panel -->
+<div class="row">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm rounded-3 bg-white p-4 p-sm-5 mb-4 position-relative overflow-hidden">
+            <div class="row align-items-center position-relative" style="z-index: 1;">
+                <div class="col-lg-8">
+                    <h1 class="fw-bold text-dark mb-3">Admin Console</h1>
+                    <p class="text-muted leading-relaxed mb-4" style="max-width: 600px;">
+                        Manage HR roles, add new departments, review employee stats, and generate operational SQL reports. All actions are handled directly via optimized parameter-bound SQLite queries.
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{% url 'admin_module:manage_hr' %}" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm"><i class="bi bi-people me-1"></i>Manage HR Managers</a>
+                        <a href="{% url 'department_module:list' %}" class="btn btn-outline-secondary px-4 py-2 fw-semibold"><i class="bi bi-building me-1"></i>Manage Departments</a>
+                    </div>
+                </div>
+                <div class="col-lg-4 d-none d-lg-block text-end">
+                    <i class="bi bi-shield-lock-fill text-primary" style="font-size: 8rem; opacity: 0.15;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

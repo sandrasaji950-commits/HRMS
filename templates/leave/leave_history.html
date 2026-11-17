@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Leave History | Smart HRMS{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'employee_module:dashboard' %}" class="text-decoration-none text-secondary">Dashboard</a></li>
+<li class="breadcrumb-item active" aria-current="page">Leave History</li>
+{% endblock %}
+
+{% block page_title %}Leave Application History{% endblock %}
+{% block page_subtitle %}Track the processing status of all your submitted leave requests{% endblock %}
+
+{% block page_actions %}
+<a href="{% url 'leave_module:apply' %}" class="btn btn-primary fw-semibold shadow-sm"><i class="bi bi-send-plus-fill me-1"></i>New Application</a>
+{% endblock %}
+
+{% block content %}
+<div class="card border-0 shadow-sm rounded-3">
+    <div class="card-body p-4">
+        
+        <h5 class="card-title fw-bold text-dark mb-4">My Requests</h5>
+        
+        {% if leaves %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle border-light mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" class="py-3 px-4 text-secondary fw-semibold">Leave Type</th>
+                        <th scope="col" class="py-3 text-secondary fw-semibold">Duration</th>
+                        <th scope="col" class="py-3 text-secondary fw-semibold">Reason</th>
+                        <th scope="col" class="py-3 px-4 text-secondary fw-semibold text-end">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for leave in leaves %}
+                    <tr>
+                        <td class="px-4 fw-semibold text-dark">{{ leave.leave_type }}</td>
+                        <td>
+                            <div>
+                                <strong class="text-dark">{{ leave.start_date }}</strong> to <strong class="text-dark">{{ leave.end_date }}</strong>
+                            </div>
+                        </td>
+                        <td class="text-muted text-truncate" style="max-width: 300px;">{{ leave.reason|default:"--" }}</td>
+                        <td class="px-4 text-end">
+                            <span class="badge rounded-pill {% if leave.status == 'Approved' %}bg-success bg-opacity-10 text-success{% elif leave.status == 'Rejected' %}bg-danger bg-opacity-10 text-danger{% else %}bg-warning bg-opacity-10 text-warning{% endif %} px-3 py-2">
+                                {{ leave.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-calendar-x text-muted opacity-50" style="font-size: 3rem;"></i>
+            <p class="text-muted mt-3 mb-0">You have not submitted any leave requests yet.</p>
+        </div>
+        {% endif %}
+        
+    </div>
+</div>
+{% endblock %}

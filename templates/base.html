@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Smart HRMS{% endblock %}</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-light">
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header d-flex align-items-center justify-content-between px-3 py-4 border-bottom border-secondary">
+            <h4 class="text-white mb-0 fw-bold"><i class="bi bi-rocket-takeoff-fill me-2 text-primary"></i>Smart HRMS</h4>
+            <button class="btn btn-link text-white d-md-none border-0" id="sidebarCloseBtn" type="button" aria-label="Close navigation menu">
+                <i class="bi bi-x-lg fs-5" aria-hidden="true"></i>
+            </button>
+        </div>
+        
+        <div class="sidebar-menu py-3">
+            <div class="px-3 mb-2 text-uppercase text-xs text-muted tracking-wider fw-bold" style="font-size: 0.75rem;">Menu</div>
+            
+            <!-- Dashboard (Generic redirection depending on role) -->
+            {% if request.role == 'Admin' %}
+                <a href="{% url 'admin_module:dashboard' %}" class="menu-item {% if '/admin/dashboard/' in request.path %}active{% endif %}">
+                    <i class="bi bi-speedometer2"></i>Dashboard
+                </a>
+                <a href="{% url 'admin_module:manage_hr' %}" class="menu-item {% if '/admin/hr/' in request.path %}active{% endif %}">
+                    <i class="bi bi-people-fill"></i>HR Managers
+                </a>
+                <a href="{% url 'hr_module:manage_employees' %}" class="menu-item {% if '/hr/employees/' in request.path %}active{% endif %}">
+                    <i class="bi bi-person-badge-fill"></i>Employees
+                </a>
+                <a href="{% url 'department_module:list' %}" class="menu-item {% if '/department/' in request.path %}active{% endif %}">
+                    <i class="bi bi-building"></i>Departments
+                </a>
+                <a href="{% url 'attendance_module:manage' %}" class="menu-item {% if '/attendance/' in request.path %}active{% endif %}">
+                    <i class="bi bi-calendar2-check-fill"></i>Attendance Logs
+                </a>
+                <a href="{% url 'leave_module:manage' %}" class="menu-item {% if '/leave/' in request.path %}active{% endif %}">
+                    <i class="bi bi-calendar-event-fill"></i>Leave Requests
+                </a>
+                
+                <div class="px-3 mt-4 mb-2 text-uppercase text-xs text-muted tracking-wider fw-bold" style="font-size: 0.75rem;">Reports</div>
+                <a href="{% url 'reports_module:employee' %}" class="menu-item {% if '/reports/employee/' in request.path %}active{% endif %}">
+                    <i class="bi bi-file-earmark-person-fill"></i>Employee Report
+                </a>
+                <a href="{% url 'reports_module:attendance' %}" class="menu-item {% if '/reports/attendance/' in request.path %}active{% endif %}">
+                    <i class="bi bi-file-earmark-spreadsheet-fill"></i>Attendance Report
+                </a>
+                <a href="{% url 'reports_module:leave' %}" class="menu-item {% if '/reports/leave/' in request.path %}active{% endif %}">
+                    <i class="bi bi-file-earmark-text-fill"></i>Leave Report
+                </a>
+            {% elif request.role == 'HR' %}
+                <a href="{% url 'hr_module:dashboard' %}" class="menu-item {% if '/hr/dashboard/' in request.path %}active{% endif %}">
+                    <i class="bi bi-speedometer2"></i>Dashboard
+                </a>
+                <a href="{% url 'hr_module:manage_employees' %}" class="menu-item {% if '/hr/employees/' in request.path %}active{% endif %}">
+                    <i class="bi bi-person-badge-fill"></i>Employee Manager
+                </a>
+                <a href="{% url 'attendance_module:manage' %}" class="menu-item {% if '/attendance/' in request.path %}active{% endif %}">
+                    <i class="bi bi-calendar2-check-fill"></i>Attendance Logs
+                </a>
+                <a href="{% url 'leave_module:manage' %}" class="menu-item {% if '/leave/' in request.path %}active{% endif %}">
+                    <i class="bi bi-calendar-event-fill"></i>Leave Requests
+                </a>
+                
+                <div class="px-3 mt-4 mb-2 text-uppercase text-xs text-muted tracking-wider fw-bold" style="font-size: 0.75rem;">Reports</div>
+                <a href="{% url 'reports_module:employee' %}" class="menu-item {% if '/reports/employee/' in request.path %}active{% endif %}">
+                    <i class="bi bi-file-earmark-person-fill"></i>Employee Report
+                </a>
+                <a href="{% url 'reports_module:attendance' %}" class="menu-item {% if '/reports/attendance/' in request.path %}active{% endif %}">
+                    <i class="bi bi-file-earmark-spreadsheet-fill"></i>Attendance Report
+                </a>
+                <a href="{% url 'reports_module:leave' %}" class="menu-item {% if '/reports/leave/' in request.path %}active{% endif %}">
+                    <i class="bi bi-file-earmark-text-fill"></i>Leave Report
+                </a>
+            {% elif request.role == 'Employee' %}
+                <a href="{% url 'employee_module:dashboard' %}" class="menu-item {% if '/employee/dashboard/' in request.path %}active{% endif %}">
+                    <i class="bi bi-speedometer2"></i>Dashboard
+                </a>
+                <a href="{% url 'employee_module:profile' %}" class="menu-item {% if '/employee/profile/' in request.path %}active{% endif %}">
+                    <i class="bi bi-person-circle"></i>My Profile
+                </a>
+                <a href="{% url 'attendance_module:mark' %}" class="menu-item {% if '/attendance/' in request.path %}active{% endif %}">
+                    <i class="bi bi-calendar2-check-fill"></i>Mark Attendance
+                </a>
+                <a href="{% url 'leave_module:apply' %}" class="menu-item {% if '/leave/apply/' in request.path %}active{% endif %}">
+                    <i class="bi bi-send-fill"></i>Apply Leave
+                </a>
+                <a href="{% url 'leave_module:history' %}" class="menu-item {% if '/leave/history/' in request.path %}active{% endif %}">
+                    <i class="bi bi-clock-history"></i>Leave History
+                </a>
+            {% endif %}
+            
+            <div class="px-3 mt-4 mb-2 text-uppercase text-xs text-muted tracking-wider fw-bold" style="font-size: 0.75rem;">Account Settings</div>
+            <a href="{% url 'accounts:change_password' %}" class="menu-item {% if '/accounts/change-password/' in request.path %}active{% endif %}">
+                <i class="bi bi-key-fill"></i>Change Password
+            </a>
+            <a href="{% url 'accounts:logout' %}" class="menu-item text-danger mt-2">
+                <i class="bi bi-box-arrow-left"></i>Logout
+            </a>
+        </div>
+    </div>
+    <button class="sidebar-backdrop" id="sidebarBackdrop" type="button" aria-label="Close navigation menu"></button>
+
+    <!-- Main Content Area -->
+    <div class="main-content" id="main-content">
+        
+        <!-- Top Navbar -->
+        <nav class="navbar navbar-expand bg-white app-header sticky-top" aria-label="Primary navigation">
+            <div class="container-fluid app-header-inner">
+                <button class="btn header-toggle" id="sidebarToggleBtn" type="button" aria-label="Toggle navigation menu" aria-controls="sidebar" aria-expanded="false">
+                    <i class="bi bi-list" aria-hidden="true"></i>
+                </button>
+                
+                <div class="header-greeting">
+                    <span class="header-eyebrow">Smart HRMS workspace</span>
+                    <div class="header-welcome">
+                        Welcome back, <span>{{ request.username }}</span>
+                        <span class="header-role">{{ request.role }}</span>
+                    </div>
+                </div>
+                
+                <div class="ms-auto">
+                    <div class="dropdown">
+                        <button class="user-menu-trigger dropdown-toggle" type="button" id="userMenu" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Open account menu">
+                            <span class="user-avatar" aria-hidden="true">
+                                {{ request.username|slice:":2"|upper }}
+                            </span>
+                            <span class="user-menu-copy">
+                                <span class="user-menu-name">{{ request.username }}</span>
+                                <span class="user-menu-role">{{ request.role }}</span>
+                            </span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end user-menu-dropdown" aria-labelledby="userMenu">
+                            {% if request.role == 'Employee' %}
+                            <li><a class="dropdown-item" href="{% url 'employee_module:profile' %}"><i class="bi bi-person me-2" aria-hidden="true"></i>Profile</a></li>
+                            {% endif %}
+                            <li><a class="dropdown-item" href="{% url 'accounts:change_password' %}"><i class="bi bi-key me-2" aria-hidden="true"></i>Change Password</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="{% url 'accounts:logout' %}"><i class="bi bi-box-arrow-left me-2" aria-hidden="true"></i>Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Dynamic Page Wrapper -->
+        <div class="p-4 container-fluid" style="min-height: calc(100vh - 120px);">
+            
+            <!-- Breadcrumbs -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb mb-0 bg-transparent p-0">
+                    <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-secondary"><i class="bi bi-house-door-fill me-1"></i>Home</a></li>
+                    {% block breadcrumbs %}
+                    {% endblock %}
+                </ol>
+            </nav>
+
+            <!-- Page Title Block -->
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <div>
+                    <h2 class="h3 mb-1 text-dark fw-bold">{% block page_title %}{% endblock %}</h2>
+                    <p class="text-muted mb-0">{% block page_subtitle %}{% endblock %}</p>
+                </div>
+                <div>
+                    {% block page_actions %}{% endblock %}
+                </div>
+            </div>
+
+            <!-- Messages Alert -->
+            {% if messages %}
+                <div class="row">
+                    <div class="col-12">
+                        {% for message in messages %}
+                            <div class="alert alert-{% if message.tags == 'error' %}danger{% elif message.tags == 'success' %}success{% else %}info{% endif %} alert-dismissible fade show shadow-sm" role="alert">
+                                {% if message.tags == 'error' %}
+                                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                {% elif message.tags == 'success' %}
+                                    <i class="bi bi-check-circle-fill me-2"></i>
+                                {% else %}
+                                    <i class="bi bi-info-circle-fill me-2"></i>
+                                {% endif %}
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Core Page Content -->
+            {% block content %}{% endblock %}
+            
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer bg-white border-top py-3 text-center text-muted w-100 mt-auto">
+            <div class="container-fluid">
+                <span class="text-xs">&copy; 2026 Smart HRMS. All rights reserved.</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Bootstrap 5 Bundle JS with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    
+    <!-- Custom JS -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html> 

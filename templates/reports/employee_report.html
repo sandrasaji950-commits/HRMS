@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Employee Report | Smart HRMS{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="#" class="text-decoration-none text-secondary">Reports</a></li>
+<li class="breadcrumb-item active" aria-current="page">Employee Report</li>
+{% endblock %}
+
+{% block page_title %}Employee Report{% endblock %}
+{% block page_subtitle %}Analytical report listing staff details, department structures, and credentials{% endblock %}
+
+{% block page_actions %}
+<button onclick="window.print();" class="btn btn-outline-secondary fw-semibold shadow-sm"><i class="bi bi-printer me-1"></i>Print Report</button>
+{% endblock %}
+
+{% block content %}
+<!-- Filters Card -->
+<div class="card border-0 shadow-sm rounded-3 mb-4 d-print-none">
+    <div class="card-body p-4">
+        <form method="get" action="{% url 'reports_module:employee' %}" class="row g-3 align-items-end">
+            
+            <!-- Department -->
+            <div class="col-12 col-md-4">
+                <label for="department" class="form-label fw-semibold text-secondary small text-uppercase">Department</label>
+                <select class="form-select bg-light" id="department" name="department">
+                    <option value="">All Departments</option>
+                    {% for dept in departments %}
+                        <option value="{{ dept.department_id }}" {% if selected_dept == dept.department_id|stringformat:"i" %}selected{% endif %}>{{ dept.department_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <!-- Status -->
+            <div class="col-12 col-sm-6 col-md-4">
+                <label for="status" class="form-label fw-semibold text-secondary small text-uppercase">Status</label>
+                <select class="form-select bg-light" id="status" name="status">
+                    <option value="">All Statuses</option>
+                    <option value="Active" {% if selected_status == 'Active' %}selected{% endif %}>Active</option>
+                    <option value="Inactive" {% if selected_status == 'Inactive' %}selected{% endif %}>Inactive</option>
+                </select>
+            </div>
+            
+            <!-- Action buttons -->
+            <div class="col-12 col-sm-6 col-md-4 d-flex gap-2">
+                <button type="submit" class="btn btn-secondary w-100 fw-semibold"><i class="bi bi-funnel-fill me-1"></i>Filter</button>
+                <a href="{% url 'reports_module:employee' %}" class="btn btn-outline-secondary w-100 fw-semibold">Reset</a>
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+<!-- Report Table -->
+<div class="card border-0 shadow-sm rounded-3">
+    <div class="card-body p-4">
+        
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h5 class="card-title fw-bold text-dark mb-0">Roster Summary Table</h5>
+            <span class="text-muted small">Generated on: {% now "Y-m-d H:i" %}</span>
+        </div>
+        
+        {% if employees %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle mb-0" style="border-color: #f1f3f5;">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" class="py-3 px-3 text-secondary fw-semibold">ID</th>
+                        <th scope="col" class="py-3 text-secondary fw-semibold">Full Name</th>
+                        <th scope="col" class="py-3 text-secondary fw-semibold">Email</th>
+                        <th scope="col" class="py-3 text-secondary fw-semibold">Joining Date</th>
+                        <th scope="col" class="py-3 text-secondary fw-semibold">Dept & Designation</th>
+                        <th scope="col" class="py-3 text-secondary fw-semibold">Credentials</th>
+                        <th scope="col" class="py-3 text-secondary fw-semibold">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for emp in employees %}
+                    <tr>
+                        <td class="px-3 fw-semibold text-secondary">#{{ emp.employee_id }}</td>
+                        <td class="fw-bold text-dark">{{ emp.first_name }} {{ emp.last_name }}</td>
+                        <td>{{ emp.email }}</td>
+                        <td class="text-secondary">{{ emp.joining_date }}</td>
+                        <td>
+                            <div>{{ emp.designation }}</div>
+                            <span class="text-muted small">{{ emp.department_name|default:"Unassigned" }}</span>
+                        </td>
+                        <td>
+                            <div class="small">
+                                <div><span class="text-muted">User:</span> <strong class="text-dark">{{ emp.username|default:"N/A" }}</strong></div>
+                                <div><span class="text-muted">Pass:</span> <code class="bg-light text-primary px-1 rounded">{{ emp.plain_password|default:"N/A" }}</code></div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge rounded-pill {% if emp.status == 'Active' %}bg-success bg-opacity-10 text-success{% else %}bg-danger bg-opacity-10 text-danger{% endif %} px-2.5 py-1.5">
+                                {{ emp.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-file-earmark-x text-muted opacity-50" style="font-size: 3rem;"></i>
+            <p class="text-muted mt-3 mb-0">No records found for report.</p>
+        </div>
+        {% endif %}
+        
+    </div>
+</div>
+{% endblock %}

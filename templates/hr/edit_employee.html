@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Employee | Smart HRMS{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'hr_module:dashboard' %}" class="text-decoration-none text-secondary">Dashboard</a></li>
+<li class="breadcrumb-item"><a href="{% url 'hr_module:manage_employees' %}" class="text-decoration-none text-secondary">Employees</a></li>
+<li class="breadcrumb-item active" aria-current="page">Edit</li>
+{% endblock %}
+
+{% block page_title %}Update Employee Profile{% endblock %}
+{% block page_subtitle %}Modify details and access credentials for employee: {{ employee.first_name }} {{ employee.last_name }}{% endblock %}
+
+{% block content %}
+<form action="{% url 'hr_module:edit_employee' employee.employee_id %}" method="post" class="needs-validation" novalidate>
+    {% csrf_token %}
+    <div class="row g-4">
+        
+        <!-- Column 1: System Credentials -->
+        <div class="col-12 col-lg-4">
+            <div class="card border-0 shadow-sm rounded-3 h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold text-dark mb-4"><i class="bi bi-shield-lock-fill me-2 text-primary"></i>System Access</h5>
+                    
+                    <!-- Username -->
+                    <div class="mb-3">
+                        <label for="username" class="form-label fw-semibold text-secondary">Username <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="username" name="username" value="{{ user.username|default:'' }}" required placeholder="e.g. johndoe">
+                        <div class="invalid-feedback">Please enter a username.</div>
+                    </div>
+                    
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label fw-semibold text-secondary">New Password (Leave blank to keep current)</label>
+                        <input type="password" class="form-control" id="password" name="password" minlength="8" placeholder="Enter new password to reset">
+                        <div class="invalid-feedback">Password must be at least 8 characters.</div>
+                        <div class="form-text text-muted">Current Plain Password: <strong>{{ user.plain_password|default:"Not Stored" }}</strong></div>
+                    </div>
+                    
+                    <div class="bg-light p-3 rounded text-muted mt-4" style="font-size: 0.85rem;">
+                        <i class="bi bi-info-circle me-1 text-primary"></i>Credentials are linked to the system user login profile.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Column 2: Personal / Professional Info -->
+        <div class="col-12 col-lg-8">
+            <div class="card border-0 shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <h5 class="card-title fw-bold text-dark mb-4"><i class="bi bi-person-badge-fill me-2 text-primary"></i>Employee Details</h5>
+                    
+                    <div class="row g-3">
+                        
+                        <!-- First Name -->
+                        <div class="col-12 col-sm-6">
+                            <label for="first_name" class="form-label fw-semibold text-secondary">First Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ employee.first_name }}" required placeholder="e.g. John">
+                            <div class="invalid-feedback">Please enter first name.</div>
+                        </div>
+                        
+                        <!-- Last Name -->
+                        <div class="col-12 col-sm-6">
+                            <label for="last_name" class="form-label fw-semibold text-secondary">Last Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" value="{{ employee.last_name }}" required placeholder="e.g. Doe">
+                            <div class="invalid-feedback">Please enter last name.</div>
+                        </div>
+                        
+                        <!-- Email -->
+                        <div class="col-12 col-sm-6">
+                            <label for="email" class="form-label fw-semibold text-secondary">Email Address <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ employee.email }}" required placeholder="e.g. john.doe@company.com">
+                            <div class="invalid-feedback">Please enter a valid email address.</div>
+                        </div>
+                        
+                        <!-- Phone -->
+                        <div class="col-12 col-sm-6">
+                            <label for="phone" class="form-label fw-semibold text-secondary">Phone Number</label>
+                            <input type="text" class="form-control" id="phone" name="phone" value="{{ employee.phone|default:'' }}" placeholder="e.g. +1234567890">
+                        </div>
+                        
+                        <!-- Gender -->
+                        <div class="col-12 col-sm-6">
+                            <label for="gender" class="form-label fw-semibold text-secondary">Gender</label>
+                            <select class="form-select" id="gender" name="gender">
+                                <option value="Male" {% if employee.gender == 'Male' %}selected{% endif %}>Male</option>
+                                <option value="Female" {% if employee.gender == 'Female' %}selected{% endif %}>Female</option>
+                                <option value="Other" {% if employee.gender == 'Other' %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Joining Date -->
+                        <div class="col-12 col-sm-6">
+                            <label for="joining_date" class="form-label fw-semibold text-secondary">Joining Date <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="joining_date" name="joining_date" value="{{ employee.joining_date }}" required>
+                            <div class="invalid-feedback">Please select joining date.</div>
+                        </div>
+                        
+                        <!-- Designation -->
+                        <div class="col-12 col-sm-6">
+                            <label for="designation" class="form-label fw-semibold text-secondary">Designation <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="designation" name="designation" value="{{ employee.designation }}" required placeholder="e.g. Software Engineer">
+                            <div class="invalid-feedback">Please enter designation.</div>
+                        </div>
+                        
+                        <!-- Department -->
+                        <div class="col-12 col-sm-6">
+                            <label for="department_id" class="form-label fw-semibold text-secondary">Department <span class="text-danger">*</span></label>
+                            <select class="form-select" id="department_id" name="department_id" required>
+                                <option value="" disabled>Select Department</option>
+                                {% for dept in departments %}
+                                    <option value="{{ dept.department_id }}" {% if employee.department_id == dept.department_id %}selected{% endif %}>{{ dept.department_name }}</option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">Please select a department.</div>
+                        </div>
+                        
+                        <!-- Status -->
+                        <div class="col-12">
+                            <label class="form-label fw-semibold text-secondary d-block">Status</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="status" id="status_active" value="Active" {% if employee.status == 'Active' %}checked{% endif %}>
+                                <label class="form-check-label text-success fw-medium" for="status_active">Active</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="status" id="status_inactive" value="Inactive" {% if employee.status == 'Inactive' %}checked{% endif %}>
+                                <label class="form-check-label text-danger fw-medium" for="status_inactive">Inactive</label>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    
+                    <hr class="my-4 text-muted opacity-25">
+                    
+                    <!-- Buttons -->
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm"><i class="bi bi-save me-1"></i>Save Changes</button>
+                        <a href="{% url 'hr_module:manage_employees' %}" class="btn btn-outline-secondary px-4 py-2 fw-semibold">Cancel</a>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</form>
+{% endblock %}

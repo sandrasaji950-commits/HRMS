@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Smart HRMS</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Custom CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="bg-gradient-primary d-flex align-items-center justify-content-center min-vh-100 py-5">
+    
+    <div class="container fade-in">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
+                
+                <!-- Brand logo and name -->
+                <div class="text-center mb-4 text-white">
+                    <h1 class="display-6 fw-bold mb-1"><i class="bi bi-rocket-takeoff-fill me-2"></i>Smart HRMS</h1>
+                    <p class="text-white-50 small">Centralized Management System</p>
+                </div>
+                
+                <!-- Login Card -->
+                <div class="card border-0 shadow-lg fade-in" style="border-radius: 1rem;">
+                    <div class="card-body p-4 p-sm-5">
+                        
+                        <h3 class="fw-bold mb-2 text-dark text-center">Sign In</h3>
+                        <p class="text-muted text-center mb-4 small">Enter your credentials to access your dashboard</p>
+                        
+                        <!-- Messages Alert -->
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}info{% endif %} alert-dismissible fade show mb-4" role="alert">
+                                    <i class="bi bi-exclamation-circle-fill me-2"></i>
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        
+                        <form action="{% url 'accounts:login' %}" method="post" class="needs-validation" novalidate>
+                            {% csrf_token %}
+                            
+                            <!-- Username Field -->
+                            <div class="mb-3">
+                                <label for="username" class="form-label fw-medium text-secondary">Username <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-person"></i></span>
+                                    <input type="text" class="form-control bg-light border-start-0 ps-0" id="username" name="username" placeholder="e.g. admin" required autocomplete="username">
+                                </div>
+                                <div class="invalid-feedback">Please enter your username.</div>
+                            </div>
+                            
+                            <!-- Password Field -->
+                            <div class="mb-4">
+                                <label for="password" class="form-label fw-medium text-secondary">Password <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-lock"></i></span>
+                                    <input type="password" class="form-control bg-light border-start-0 ps-0" id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
+                                </div>
+                                <div class="invalid-feedback">Please enter your password.</div>
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary w-100 py-2.5 fw-bold text-uppercase tracking-wider shadow-sm mb-3">Sign In</button>
+                            
+                        </form>
+                        
+                        <!-- Demo credentials helper for freshers resume presentation -->
+                        <!-- <div class="bg-light p-3 rounded-3 mt-4"> -->
+                            <!-- <h6 class="fw-bold mb-2 text-primary small"><i class="bi bi-info-circle-fill me-1"></i>Demo Accounts:</h6>
+                            <ul class="list-unstyled mb-0 text-muted" style="font-size: 0.8rem;">
+                                <li><strong>Admin:</strong> admin / admin123</li>
+                                <li><strong>HR Manager:</strong> Create one via Admin Panel</li>
+                                <li><strong>Employee:</strong> Create one via HR Panel</li>
+                            </ul>
+                            </div> -->
+                        
+                    </div>
+                </div>
+                
+                <!-- Bottom note -->
+                <div class="text-center mt-4 text-white-50 small">
+                    <span>Smart Human Resource Management System &copy; 2026</span>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 Bundle JS with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    
+    <script>
+        // Bootstrap form validation script
+        (function () {
+            'use strict'
+            var forms = document.querySelectorAll('.needs-validation')
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+</body>
+</html>

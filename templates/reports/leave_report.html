@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Leave Report | Smart HRMS{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="#" class="text-decoration-none text-secondary">Reports</a></li>
+<li class="breadcrumb-item active" aria-current="page">Leave Report</li>
+{% endblock %}
+
+{% block page_title %}Leave Report{% endblock %}
+{% block page_subtitle %}Analytical report detailing leave requests, type breakdowns, and approvals{% endblock %}
+
+{% block page_actions %}
+<button onclick="window.print();" class="btn btn-outline-secondary fw-semibold shadow-sm"><i class="bi bi-printer me-1"></i>Print Report</button>
+{% endblock %}
+
+{% block content %}
+<!-- Filters Card -->
+<div class="card border-0 shadow-sm rounded-3 mb-4 d-print-none">
+    <div class="card-body p-4">
+        <form method="get" action="{% url 'reports_module:leave' %}" class="row g-3 align-items-end">
+            
+            <!-- Start Date -->
+            <div class="col-12 col-sm-6 col-md-2">
+                <label for="start_date" class="form-label fw-semibold text-secondary small text-uppercase">Start Date</label>
+                <input type="date" class="form-control bg-light" id="start_date" name="start_date" value="{{ start_date }}">
+            </div>
+            
+            <!-- End Date -->
+            <div class="col-12 col-sm-6 col-md-2">
+                <label for="end_date" class="form-label fw-semibold text-secondary small text-uppercase">End Date</label>
+                <input type="date" class="form-control bg-light" id="end_date" name="end_date" value="{{ end_date }}">
+            </div>
+            
+            <!-- Leave Type -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <label for="leave_type" class="form-label fw-semibold text-secondary small text-uppercase">Leave Type</label>
+                <select class="form-select bg-light" id="leave_type" name="leave_type">
+                    <option value="">All Types</option>
+                    <option value="Casual Leave" {% if selected_type == 'Casual Leave' %}selected{% endif %}>Casual Leave</option>
+                    <option value="Sick Leave" {% if selected_type == 'Sick Leave' %}selected{% endif %}>Sick Leave</option>
+                    <option value="Maternity/Paternity Leave" {% if selected_type == 'Maternity/Paternity Leave' %}selected{% endif %}>Maternity/Paternity Leave</option>
+                    <option value="Unpaid Leave" {% if selected_type == 'Unpaid Leave' %}selected{% endif %}>Unpaid Leave</option>
+                </select>
+            </div>
+            
+            <!-- Status -->
+            <div class="col-12 col-sm-6 col-md-2">
+                <label for="status" class="form-label fw-semibold text-secondary small text-uppercase">Status</label>
+                <select class="form-select bg-light" id="status" name="status">
+                    <option value="">All Statuses</option>
+                    <option value="Pending" {% if selected_status == 'Pending' %}selected{% endif %}>Pending</option>
+                    <option value="Approved" {% if selected_status == 'Approved' %}selected{% endif %}>Approved</option>
+                    <option value="Rejected" {% if selected_status == 'Rejected' %}selected{% endif %}>Rejected</option>
+                </select>
+            </div>
+            
+            <!-- Action buttons -->
+            <div class="col-12 col-md-3 d-flex gap-2">
+                <button type="submit" class="btn btn-secondary w-100 fw-semibold"><i class="bi bi-funnel-fill me-1"></i>Filter</button>
+                <a href="{% url 'reports_module:leave' %}" class="btn btn-outline-secondary w-100 fw-semibold">Reset</a>
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+<!-- Report Table -->
+<div class="card border-0 shadow-sm rounded-3">
+    <div class="card-body p-4">
+        
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h5 class="card-title fw-bold text-dark mb-0">Leave Applications Table</h5>
+            <span class="text-muted small">Generated on: {% now "Y-m-d H:i" %}</span>
+        </div>
+        
+        {% if leaves %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle mb-0" style="border-color: #f1f3f5;">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" class="py-3 px-3 text-secondary fw-semibold">Employee</th>
+                        <th scope="col" class="py-3 text-secondary fw-semibold">Dept & Designation</th>
+                        <th scope="col" class="py-3 text-secondary fw-semibold">Leave Type</th>
+                        <th scope="col" class="py-3 text-secondary fw-semibold">Duration</th>
+                        <th scope="col" class="py-3 text-secondary fw-semibold">Reason</th>
+                        <th scope="col" class="py-3 text-secondary fw-semibold">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for leave in leaves %}
+                    <tr>
+                        <td class="px-3 fw-bold text-dark">{{ leave.first_name }} {{ leave.last_name }}</td>
+                        <td>
+                            <div>{{ leave.designation }}</div>
+                            <span class="text-muted small">{{ leave.department_name }}</span>
+                        </td>
+                        <td class="fw-semibold text-secondary">{{ leave.leave_type }}</td>
+                        <td>
+                            <div>{{ leave.start_date }} to {{ leave.end_date }}</div>
+                        </td>
+                        <td class="text-muted small">{{ leave.reason|default:"--" }}</td>
+                        <td>
+                            <span class="badge rounded-pill {% if leave.status == 'Approved' %}bg-success bg-opacity-10 text-success{% elif leave.status == 'Rejected' %}bg-danger bg-opacity-10 text-danger{% else %}bg-warning bg-opacity-10 text-warning{% endif %} px-2.5 py-1.5">
+                                {{ leave.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-file-earmark-x text-muted opacity-50" style="font-size: 3rem;"></i>
+            <p class="text-muted mt-3 mb-0">No records found for report.</p>
+        </div>
+        {% endif %}
+        
+    </div>
+</div>
+{% endblock %}

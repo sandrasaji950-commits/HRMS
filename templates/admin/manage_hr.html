@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Manage HR Managers | Smart HRMS{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'admin_module:dashboard' %}" class="text-decoration-none text-secondary">Dashboard</a></li>
+<li class="breadcrumb-item active" aria-current="page">HR Managers</li>
+{% endblock %}
+
+{% block page_title %}HR Managers{% endblock %}
+{% block page_subtitle %}Manage system access credentials for HR Personnel{% endblock %}
+
+{% block page_actions %}
+<a href="{% url 'admin_module:add_hr' %}" class="btn btn-primary fw-semibold shadow-sm"><i class="bi bi-person-plus-fill me-1"></i>Add HR Manager</a>
+{% endblock %}
+
+{% block content %}
+<div class="card border-0 shadow-sm rounded-3">
+    <div class="card-body p-4">
+        
+        <h5 class="card-title fw-bold text-dark mb-4">Personnel Registry</h5>
+        
+        {% if hr_list %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle border-light mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" class="py-3 px-4 text-secondary fw-semibold">ID</th>
+                        <th scope="col" class="py-3 text-secondary fw-semibold">Username</th>
+                        <th scope="col" class="py-3 text-secondary fw-semibold">Password (Visible to Admin)</th>
+                        <th scope="col" class="py-3 text-secondary fw-semibold">Created At</th>
+                        <th scope="col" class="py-3 px-4 text-secondary fw-semibold text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for hr in hr_list %}
+                    <tr>
+                        <td class="px-4 fw-semibold text-secondary">#{{ hr.id }}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar bg-light text-primary me-2 d-flex align-items-center justify-content-center rounded-circle fw-bold" style="width: 32px; height: 32px;">
+                                    {{ hr.username|slice:":1"|upper }}
+                                </div>
+                                <span class="fw-semibold text-dark">{{ hr.username }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <code class="bg-light text-primary px-2 py-1 rounded fw-bold fs-6">
+                                {% if hr.plain_password %}{{ hr.plain_password }}{% else %}<span class="text-muted small">Not Stored</span>{% endif %}
+                            </code>
+                        </td>
+                        <td class="text-muted">{{ hr.created_at }}</td>
+                        <td class="px-4 text-end">
+                            <div class="d-flex justify-content-end gap-2">
+                                <a href="{% url 'admin_module:edit_hr' hr.id %}" class="btn btn-sm btn-outline-primary px-2.5 py-1.5 fw-semibold"><i class="bi bi-pencil-fill me-1"></i>Edit</a>
+                                <button type="button" class="btn btn-sm btn-outline-danger px-2.5 py-1.5 fw-semibold" data-bs-toggle="modal" data-bs-target="#deleteModal{{ hr.id }}"><i class="bi bi-trash-fill me-1"></i>Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                    
+                    <!-- Delete Confirmation Modal -->
+                    <div class="modal fade" id="deleteModal{{ hr.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ hr.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 shadow-lg">
+                                <div class="modal-header border-0 pb-0">
+                                    <h5 class="modal-title fw-bold text-dark" id="deleteModalLabel{{ hr.id }}"><i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>Delete HR Manager</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body py-3">
+                                    <p class="mb-0 text-muted">Are you sure you want to delete HR account <strong>{{ hr.username }}</strong>? This action cannot be undone.</p>
+                                </div>
+                                <div class="modal-footer border-0 pt-0">
+                                    <button type="button" class="btn btn-outline-secondary px-3 py-1.5 fw-semibold" data-bs-dismiss="modal">Cancel</button>
+                                    <form action="{% url 'admin_module:delete_hr' hr.id %}" method="post">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger px-3 py-1.5 fw-semibold">Delete Account</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-people text-muted opacity-50" style="font-size: 3rem;"></i>
+            <p class="text-muted mt-3 mb-0">No HR Managers found. Click "Add HR Manager" to register one.</p>
+        </div>
+        {% endif %}
+        
+    </div>
+</div>
+{% endblock %}

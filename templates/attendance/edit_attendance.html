@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Attendance Log | Smart HRMS{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'hr_module:dashboard' %}" class="text-decoration-none text-secondary">Dashboard</a></li>
+<li class="breadcrumb-item"><a href="{% url 'attendance_module:manage' %}" class="text-decoration-none text-secondary">Attendance Logs</a></li>
+<li class="breadcrumb-item active" aria-current="page">Edit Log</li>
+{% endblock %}
+
+{% block page_title %}Adjust Attendance Log{% endblock %}
+{% block page_subtitle %}Modify attendance parameters for: {{ record.first_name }} {{ record.last_name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body p-4">
+                
+                <h5 class="card-title fw-bold text-dark mb-4"><i class="bi bi-pencil-square me-2 text-primary"></i>Attendance Record Details</h5>
+                
+                <form action="{% url 'attendance_module:edit' record.attendance_id %}" method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Date -->
+                    <div class="mb-3">
+                        <label for="attendance_date" class="form-label fw-semibold text-secondary">Attendance Date <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control py-2" id="attendance_date" name="attendance_date" required value="{{ record.attendance_date }}">
+                        <div class="invalid-feedback">Please select attendance date.</div>
+                    </div>
+                    
+                    <!-- Check-in Time -->
+                    <div class="mb-3">
+                        <label for="check_in_time" class="form-label fw-semibold text-secondary">Check-In Time</label>
+                        <input type="time" class="form-control py-2" id="check_in_time" name="check_in_time" value="{{ record.check_in_time|default:'' }}">
+                    </div>
+                    
+                    <!-- Status -->
+                    <div class="mb-4">
+                        <label for="attendance_status" class="form-label fw-semibold text-secondary">Attendance Status <span class="text-danger">*</span></label>
+                        <select class="form-select py-2" id="attendance_status" name="attendance_status" required>
+                            <option value="Present" {% if record.attendance_status == 'Present' %}selected{% endif %}>Present</option>
+                            <option value="Absent" {% if record.attendance_status == 'Absent' %}selected{% endif %}>Absent</option>
+                        </select>
+                        <div class="invalid-feedback">Please select a status.</div>
+                    </div>
+                    
+                    <!-- Buttons -->
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm"><i class="bi bi-save me-1"></i>Save Changes</button>
+                        <a href="{% url 'attendance_module:manage' %}" class="btn btn-outline-secondary px-4 py-2 fw-semibold">Cancel</a>
+                    </div>
+                    
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Department | Smart HRMS{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item"><a href="{% url 'admin_module:dashboard' %}" class="text-decoration-none text-secondary">Dashboard</a></li>
+<li class="breadcrumb-item"><a href="{% url 'department_module:list' %}" class="text-decoration-none text-secondary">Departments</a></li>
+<li class="breadcrumb-item active" aria-current="page">Add</li>
+{% endblock %}
+
+{% block page_title %}Create Department{% endblock %}
+{% block page_subtitle %}Add a new operational department structure to the database{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 col-md-8 col-lg-6">
+        <div class="card border-0 shadow-sm rounded-3">
+            <div class="card-body p-4">
+                
+                <h5 class="card-title fw-bold text-dark mb-4"><i class="bi bi-building-add me-2 text-primary"></i>Department Details</h5>
+                
+                <form action="{% url 'department_module:add' %}" method="post" class="needs-validation" novalidate>
+                    {% csrf_token %}
+                    
+                    <!-- Code -->
+                    <div class="mb-3">
+                        <label for="department_code" class="form-label fw-semibold text-secondary">Department Code <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control py-2 text-uppercase" id="department_code" name="department_code" value="{{ department_code|default:'' }}" required placeholder="e.g. ENG">
+                        <div class="invalid-feedback">Please enter department code.</div>
+                        <div class="form-text text-muted">A short unique code (e.g. HR, ENG, MKT, SALES).</div>
+                    </div>
+                    
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <label for="department_name" class="form-label fw-semibold text-secondary">Department Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control py-2" id="department_name" name="department_name" value="{{ department_name|default:'' }}" required placeholder="e.g. Engineering">
+                        <div class="invalid-feedback">Please enter department name.</div>
+                    </div>
+                    
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <label for="description" class="form-label fw-semibold text-secondary">Description</label>
+                        <textarea class="form-control py-2" id="description" name="description" rows="3" placeholder="Enter department role or notes...">{{ description|default:'' }}</textarea>
+                    </div>
+                    
+                    <!-- Buttons -->
+                    <div class="d-flex align-items-center gap-2">
+                        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm"><i class="bi bi-save me-1"></i>Create Department</button>
+                        <a href="{% url 'department_module:list' %}" class="btn btn-outline-secondary px-4 py-2 fw-semibold">Cancel</a>
+                    </div>
+                    
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

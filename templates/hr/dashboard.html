@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}HR Dashboard | Smart HRMS{% endblock %}
+
+{% block breadcrumbs %}
+<li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+{% endblock %}
+
+{% block page_title %}HR Console{% endblock %}
+{% block page_subtitle %}Central dashboard for employee files, attendance logs, and leave reviews{% endblock %}
+
+{% block content %}
+<div class="row g-4 mb-5">
+    
+    <!-- Active Employees Card -->
+    <div class="col-12 col-md-4">
+        <div class="card card-dashboard border-0 shadow-sm rounded-3 h-100 position-relative overflow-hidden">
+            <div class="card-body p-4 d-flex align-items-center">
+                <div class="stats-icon bg-primary bg-opacity-10 text-primary rounded-3 p-3 me-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                    <i class="bi bi-person-badge-fill fs-3"></i>
+                </div>
+                <div>
+                    <h6 class="text-secondary fw-semibold mb-1 small text-uppercase tracking-wider">Active Employees</h6>
+                    <h2 class="mb-0 fw-bold text-dark">{{ total_employees }}</h2>
+                </div>
+            </div>
+            <div class="position-absolute bottom-0 start-0 w-100 bg-primary" style="height: 4px;"></div>
+        </div>
+    </div>
+    
+    <!-- Today's Attendance Card -->
+    <div class="col-12 col-md-4">
+        <div class="card card-dashboard border-0 shadow-sm rounded-3 h-100 position-relative overflow-hidden">
+            <div class="card-body p-4 d-flex align-items-center">
+                <div class="stats-icon bg-success bg-opacity-10 text-success rounded-3 p-3 me-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                    <i class="bi bi-calendar2-check-fill fs-3"></i>
+                </div>
+                <div>
+                    <h6 class="text-secondary fw-semibold mb-1 small text-uppercase tracking-wider">Present Today</h6>
+                    <h2 class="mb-0 fw-bold text-dark">{{ today_attendance }}</h2>
+                </div>
+            </div>
+            <div class="position-absolute bottom-0 start-0 w-100 bg-success" style="height: 4px;"></div>
+        </div>
+    </div>
+    
+    <!-- Pending Leave Requests Card -->
+    <div class="col-12 col-md-4">
+        <div class="card card-dashboard border-0 shadow-sm rounded-3 h-100 position-relative overflow-hidden">
+            <div class="card-body p-4 d-flex align-items-center">
+                <div class="stats-icon bg-warning bg-opacity-10 text-warning rounded-3 p-3 me-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                    <i class="bi bi-calendar-event-fill fs-3"></i>
+                </div>
+                <div>
+                    <h6 class="text-secondary fw-semibold mb-1 small text-uppercase tracking-wider">Pending Leaves</h6>
+                    <h2 class="mb-0 fw-bold text-dark">{{ today_attendance }}</h2>
+                </div>
+            </div>
+            <div class="position-absolute bottom-0 start-0 w-100 bg-warning" style="height: 4px;"></div>
+        </div>
+    </div>
+    
+</div>
+
+<!-- Quick Actions Panel -->
+<div class="row">
+    <div class="col-12 col-lg-8 mb-4">
+        <div class="card border-0 shadow-sm rounded-3 bg-white p-4 p-sm-5 h-100">
+            <h2 class="fw-bold text-dark mb-3">Personnel Operations</h2>
+            <p class="text-muted leading-relaxed mb-4">
+                Maintain complete employee rosters, update personal and structural department assignments, review submitted leaves, and log employee daily attendance sheets using direct SQL integration.
+            </p>
+            <div class="d-flex flex-wrap gap-2">
+                <a href="{% url 'hr_module:manage_employees' %}" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm"><i class="bi bi-person-badge-fill me-1"></i>Employee Rosters</a>
+                <a href="{% url 'attendance_module:manage' %}" class="btn btn-outline-primary px-4 py-2 fw-semibold"><i class="bi bi-calendar2-check-fill me-1"></i>Attendance Logs</a>
+                <a href="{% url 'leave_module:manage' %}" class="btn btn-outline-secondary px-4 py-2 fw-semibold"><i class="bi bi-calendar-event-fill me-1"></i>Leave Requests</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-4 mb-4">
+        <div class="card border-0 shadow-sm rounded-3 bg-white p-4 h-100 d-flex flex-column justify-content-center align-items-center text-center">
+            <i class="bi bi-file-earmark-spreadsheet text-primary mb-3" style="font-size: 3rem;"></i>
+            <h5 class="fw-bold text-dark mb-2">Operational Reports</h5>
+            <p class="text-muted small px-3">Generate comprehensive structured reports for audits, leaves, and employee attendance.</p>
+            <a href="{% url 'reports_module:employee' %}" class="btn btn-sm btn-outline-secondary px-3 fw-semibold">Go to Reports</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
